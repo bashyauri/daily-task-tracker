@@ -34,7 +34,8 @@ Route::get('/reset-password/{token}',[PasswordResetController::class,'showPasswo
 Route::middleware(['auth','verified'])->group(function(){
 
 
-    Route::resource('categories', CategoryController::class)->except(['show']);
+    Route::resource('categories', CategoryController::class)->except(['show'])
+    ->middlewareFor(['edit', 'update', 'destroy'], 'can:manage,category');
     // Route::resource('tasks', TaskController::class);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

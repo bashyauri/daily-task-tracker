@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -46,9 +47,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        if($category->user_id !== auth()->id()){
-            abort(403);
-        }
+
         return view('categories.edit', [
             'category' => $category,
         ]);
