@@ -17,9 +17,12 @@ class CategoryController extends Controller
     {
         $user = $request->user();
         $categories = $user->categories()->latest()->paginate();
-       return view('categories.index',[
-           'categories' => $categories,
-       ]);
+        return response()->json([
+            'categories' => $categories,
+        ]);
+    //    return view('categories.index',[
+    //        'categories' => $categories,
+    //    ]);
     }
 
     /**
