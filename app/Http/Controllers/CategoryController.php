@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +17,13 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $categories = $user->categories()->latest()->paginate();
-        return response()->json([
-            'categories' => $categories,
-        ]);
-    //    return view('categories.index',[
-    //        'categories' => $categories,
-    //    ]);
+        $categories = CategoryResource::collection($user->categories()->latest()->paginate(10));
+
+
+
+       return view('categories.index',[
+           'categories' => $categories,
+       ]);
     }
 
     /**

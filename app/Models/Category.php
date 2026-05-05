@@ -11,6 +11,7 @@ use Override;
 /**
  * @property int $id
  * @property int $user_id
+ * @property string $uuid
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -25,6 +26,7 @@ use Override;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUuid($value)
  * @mixin \Eloquent
  */
 class Category extends Model
