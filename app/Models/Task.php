@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 use Override;
 
 /**
@@ -14,12 +15,13 @@ use Override;
  * @property string $title
  * @property string|null $description
  * @property bool $is_recurring
- * @property \Illuminate\Support\Carbon|null $task_date
- * @property \Illuminate\Support\Carbon|null $completed_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Category|null $category
- * @property-read \App\Models\User $user
+ * @property Carbon|null $task_date
+ * @property Carbon|null $completed_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Category|null $category
+ * @property-read User $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task query()
@@ -33,21 +35,37 @@ use Override;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class Task extends Model
 {
     use HasUuids;
+
+    /**
+     * @var array<string>
+     */
+    protected $fillable = [
+        'category_id',
+        'title',
+        'description',
+        'is_recurring',
+        'task_date',
+        'completed_at',
+    ];
+
     #[Override]
-    public function uniqueIds():array
+    public function uniqueIds(): array
     {
         return ['uuid'];
     }
-     #[Override]
-    public function getRouteKeyName()
+
+    #[Override]
+    public function getRouteKeyName(): string
     {
-        return ['uuid'];
+        return 'uuid';
     }
+
     protected function casts(): array
     {
         return [
@@ -56,11 +74,13 @@ class Task extends Model
             'completed_at' => 'datetime',
         ];
     }
-    public function user():BelongsTo
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-    public function category():BelongsTo
+
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }

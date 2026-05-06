@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -17,13 +16,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $categories = CategoryResource::collection($user->categories()->latest()->paginate(10));
+        $categories = CategoryResource::collection($user->categories()->latest()->paginate());
 
-
-
-       return view('categories.index',[
-           'categories' => $categories,
-       ]);
+        return view('categories.index', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -41,10 +38,9 @@ class CategoryController extends Controller
     {
         $user = $request->user();
         $user->categories()->create($request->validated());
+
         return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -64,6 +60,7 @@ class CategoryController extends Controller
     {
 
         $category->update($request->validated());
+
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
@@ -74,6 +71,7 @@ class CategoryController extends Controller
     {
 
         $category->delete();
+
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }
