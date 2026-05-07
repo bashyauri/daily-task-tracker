@@ -76,6 +76,7 @@ class TaskController extends Controller
 
     public function edit(Request $request, Task $task): View
     {
+
         return view('tasks.edit', [
             'task' => $task,
             'categories' => $request->user()->categories()->orderBy('name')->get(['id', 'name']),
