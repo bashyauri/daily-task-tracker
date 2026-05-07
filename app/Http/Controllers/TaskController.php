@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -77,6 +78,8 @@ class TaskController extends Controller
     public function edit(Request $request, Task $task): View
     {
 
+        $task = TaskResource::make($task);
+
         return view('tasks.edit', [
             'task' => $task,
             'categories' => $request->user()->categories()->orderBy('name')->get(['id', 'name']),
@@ -85,6 +88,7 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
+        $task = TaskResource::make($task);
         $task->update($request->validated());
 
         return redirect()
