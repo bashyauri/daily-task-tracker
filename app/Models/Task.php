@@ -14,13 +14,14 @@ use Override;
  * @property int|null $category_id
  * @property string $title
  * @property string|null $description
- * @property bool $is_recurring
+ * @property int|null $recurring_task_id
  * @property Carbon|null $task_date
  * @property Carbon|null $completed_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Category|null $category
  * @property-read User $user
+ * * @property-read RecurringTask|null $rucurringTask
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Task newQuery()
@@ -83,5 +84,9 @@ class Task extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+        public function recurringTask(): BelongsTo
+    {
+        return $this->belongsTo(RecurringTask::class);
     }
 }
