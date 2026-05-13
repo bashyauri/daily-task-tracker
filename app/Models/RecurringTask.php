@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskFrequency;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -66,6 +67,7 @@ class RecurringTask extends Model
     protected function casts()
     {
         return [
+            'frequency' => TaskFrequency::class,
             'frequency_config' => 'array',
             'start_date' => 'date',
             'end_date' => 'date'
