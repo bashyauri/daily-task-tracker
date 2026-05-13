@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS "migrations"(
 );
 CREATE TABLE IF NOT EXISTS "users"(
   "id" integer primary key autoincrement not null,
-  "uuid" varchar not null,
   "name" varchar not null,
   "email" varchar not null,
   "email_verified_at" datetime,
@@ -13,9 +12,10 @@ CREATE TABLE IF NOT EXISTS "users"(
   "remember_token" varchar,
   "created_at" datetime,
   "updated_at" datetime
+  ,
+  "uuid" varchar not null
 );
 CREATE UNIQUE INDEX "users_email_unique" on "users"("email");
-CREATE UNIQUE INDEX "users_uuid_unique" on "users"("uuid");
 CREATE TABLE IF NOT EXISTS "password_reset_tokens"(
   "email" varchar not null,
   "token" varchar not null,
@@ -82,15 +82,38 @@ CREATE TABLE IF NOT EXISTS "failed_jobs"(
 CREATE UNIQUE INDEX "failed_jobs_uuid_unique" on "failed_jobs"("uuid");
 CREATE TABLE IF NOT EXISTS "categories"(
   "id" integer primary key autoincrement not null,
-  "uuid" varchar not null,
   "user_id" integer not null,
   "name" varchar not null,
   "created_at" datetime,
   "updated_at" datetime,
+  "uuid" varchar not null,
   foreign key("user_id") references "users"("id") on delete cascade
 );
-CREATE UNIQUE INDEX "categories_uuid_unique" on "categories"("uuid");
 CREATE INDEX "categories_user_id_index" on "categories"("user_id");
+CREATE UNIQUE INDEX "users_uuid_unique" on "users"("uuid");
+CREATE UNIQUE INDEX "categories_uuid_unique" on "categories"("uuid");
+CREATE TABLE IF NOT EXISTS "tasks"(
+  "id" integer primary key autoincrement not null,
+  "user_id" integer not null,
+  "category_id" integer,
+  "title" varchar not null,
+  "description" text,
+  "is_recurring" tinyint(1) not null default('0'),
+  "task_date" datetime,
+  "completed_at" datetime,
+  "created_at" datetime,
+  "updated_at" datetime,
+  "uuid" varchar not null,
+  "recurring_task_id" integer,
+  foreign key("category_id") references categories("id") on delete set null on update no action,
+  foreign key("user_id") references users("id") on delete cascade on update no action,
+  foreign key("recurring_task_id") references "recurring_tasks"("id")
+);
+CREATE INDEX "tasks_user_id_category_id_index" on "tasks"(
+  "user_id",
+  "category_id"
+);
+CREATE UNIQUE INDEX "tasks_uuid_unique" on "tasks"("uuid");
 CREATE TABLE IF NOT EXISTS "recurring_tasks"(
   "id" integer primary key autoincrement not null,
   "uuid" varchar not null,
@@ -108,30 +131,11 @@ CREATE TABLE IF NOT EXISTS "recurring_tasks"(
   foreign key("user_id") references "users"("id"),
   foreign key("category_id") references "categories"("id")
 );
-CREATE UNIQUE INDEX "recurring_tasks_uuid_unique" on "recurring_tasks"("uuid");
 CREATE INDEX "recurring_tasks_user_id_index" on "recurring_tasks"("user_id");
-CREATE INDEX "recurring_tasks_category_id_index" on "recurring_tasks"("category_id");
-CREATE TABLE IF NOT EXISTS "tasks"(
-  "id" integer primary key autoincrement not null,
-  "uuid" varchar not null,
-  "user_id" integer not null,
-  "category_id" integer,
-  "recurring_task_id" integer,
-  "title" varchar not null,
-  "description" text,
-  "task_date" datetime,
-  "completed_at" datetime,
-  "created_at" datetime,
-  "updated_at" datetime,
-  foreign key("user_id") references "users"("id") on delete cascade,
-  foreign key("category_id") references "categories"("id") on delete set null,
-  foreign key("recurring_task_id") references "recurring_tasks"("id")
-);
-CREATE UNIQUE INDEX "tasks_uuid_unique" on "tasks"("uuid");
-CREATE INDEX "tasks_user_id_category_id_index" on "tasks"(
-  "user_id",
+CREATE INDEX "recurring_tasks_category_id_index" on "recurring_tasks"(
   "category_id"
 );
+CREATE UNIQUE INDEX "recurring_tasks_uuid_unique" on "recurring_tasks"("uuid");
 
 INSERT INTO migrations VALUES(1,'0001_01_01_000000_create_users_table',1);
 INSERT INTO migrations VALUES(2,'0001_01_01_000001_create_cache_table',1);
@@ -139,5 +143,4 @@ INSERT INTO migrations VALUES(3,'0001_01_01_000002_create_jobs_table',1);
 INSERT INTO migrations VALUES(4,'2026_04_14_165353_create_tasks_table',2);
 INSERT INTO migrations VALUES(5,'2026_04_14_165412_create_categories_table',2);
 INSERT INTO migrations VALUES(6,'2026_04_30_085024_add_uuids_to_tables',3);
-INSERT INTO migrations VALUES(7,'2026_05_09_113400_create_recurring_tasks_table',4);
-INSERT INTO migrations VALUES(8,'2026_05_09_114502_add_recurring_task_id_to_task_table',4);
+INSERT INTO migrations VALUES(10,'2026_05_09_113400_create_recurring_tasks_table',4);
