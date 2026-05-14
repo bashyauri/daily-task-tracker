@@ -68,21 +68,6 @@
         <x-input-error :messages="$errors->get('description')" class="mt-2" />
     </div>
 
-    <label class="flex items-start gap-3 rounded-lg border border-gray-200 px-4 py-3 text-sm text-gray-700 dark:border-gray-700 dark:text-gray-200">
-        <input
-            type="checkbox"
-            name="is_recurring"
-            value="1"
-            class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-900 dark:focus:ring-indigo-600"
-            @checked((bool) old('is_recurring', $task?->is_recurring))
-        >
-        <span>
-            <span class="block font-medium">Recurring task</span>
-            <span class="mt-1 block text-xs text-gray-500 dark:text-gray-400">Use this for routines you expect to revisit regularly.</span>
-        </span>
-    </label>
-    <x-input-error :messages="$errors->get('is_recurring')" class="mt-2" />
-
     <div class="flex items-center justify-end gap-3">
         <a
             href="{{ route('tasks.index') }}"

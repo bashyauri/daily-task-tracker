@@ -23,7 +23,7 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'category_id' => $this->category_id,
             'category' => CategoryResource::make($this->whenLoaded('category')),
-            'is_recurring' => $this->is_recurring,
+            'is_recurring' => $this->recurring_task_id !== null,
             'task_date' => $this->task_date,
             'completed_at' => $this->completed_at,
             'created_at' => $this->created_at,

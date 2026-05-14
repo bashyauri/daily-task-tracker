@@ -50,7 +50,6 @@ class Task extends Model
         'category_id',
         'title',
         'description',
-        'is_recurring',
         'task_date',
         'completed_at',
     ];
@@ -70,7 +69,6 @@ class Task extends Model
     protected function casts(): array
     {
         return [
-            'is_recurring' => 'boolean',
             'task_date' => 'datetime',
             'completed_at' => 'datetime',
         ];
@@ -85,7 +83,8 @@ class Task extends Model
     {
         return $this->belongsTo(Category::class);
     }
-        public function recurringTask(): BelongsTo
+
+    public function recurringTask(): BelongsTo
     {
         return $this->belongsTo(RecurringTask::class);
     }

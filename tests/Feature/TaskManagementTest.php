@@ -28,7 +28,6 @@ test('a user can create update toggle and delete their own task', function () {
         'description' => 'Share team progress and blockers',
         'category_id' => $category->id,
         'task_date' => '2026-05-05',
-        'is_recurring' => '1',
     ])
         ->assertRedirect(route('tasks.index'));
 
@@ -40,7 +39,6 @@ test('a user can create update toggle and delete their own task', function () {
         'id' => $task->id,
         'title' => 'Write weekly summary',
         'category_id' => $category->id,
-        'is_recurring' => 1,
     ]);
 
     put(route('tasks.update', $task), [
@@ -48,14 +46,12 @@ test('a user can create update toggle and delete their own task', function () {
         'description' => 'Share highlights with leadership',
         'category_id' => $category->id,
         'task_date' => '2026-05-06',
-        'is_recurring' => '0',
     ])
         ->assertRedirect(route('tasks.index'));
 
     $task = Task::query()->findOrFail($task->id);
 
-    expect($task->title)->toBe('Write monthly summary')
-        ->and($task->is_recurring)->toBeFalse();
+    expect($task->title)->toBe('Write monthly summary');
 
     patch(route('tasks.toggle-completion', $task))
         ->assertRedirect(route('tasks.index'));
@@ -75,7 +71,6 @@ test('a user cannot manage another users task', function () {
     $task = $owner->tasks()->create([
         'title' => 'Private task',
         'description' => 'Owner only',
-        'is_recurring' => false,
         'task_date' => '2026-05-04',
     ]);
 
@@ -89,7 +84,6 @@ test('a user cannot manage another users task', function () {
         'description' => 'Nope',
         'category_id' => '',
         'task_date' => '2026-05-05',
-        'is_recurring' => '0',
     ])
         ->assertForbidden();
 
@@ -111,7 +105,6 @@ test('task index filters by status category and date range', function () {
         'title' => 'Completed work task',
         'description' => 'Should remain visible',
         'category_id' => $work->id,
-        'is_recurring' => false,
         'task_date' => '2026-05-10',
         'completed_at' => now(),
     ]);
@@ -120,7 +113,6 @@ test('task index filters by status category and date range', function () {
         'title' => 'Incomplete work task',
         'description' => 'Wrong status',
         'category_id' => $work->id,
-        'is_recurring' => false,
         'task_date' => '2026-05-11',
     ]);
 
@@ -128,7 +120,6 @@ test('task index filters by status category and date range', function () {
         'title' => 'Completed personal task',
         'description' => 'Wrong category',
         'category_id' => $personal->id,
-        'is_recurring' => false,
         'task_date' => '2026-05-12',
         'completed_at' => now(),
     ]);
@@ -137,7 +128,6 @@ test('task index filters by status category and date range', function () {
         'title' => 'Completed outside range',
         'description' => 'Wrong date',
         'category_id' => $work->id,
-        'is_recurring' => false,
         'task_date' => '2026-06-01',
         'completed_at' => now(),
     ]);
@@ -146,7 +136,6 @@ test('task index filters by status category and date range', function () {
         'title' => 'Other user task',
         'description' => 'Should not be visible',
         'category_id' => $otherCategory->id,
-        'is_recurring' => false,
         'task_date' => '2026-05-10',
         'completed_at' => now(),
     ]);

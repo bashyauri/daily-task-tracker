@@ -62,7 +62,7 @@
                                             <x-tasks.status-badge :completed="$task->completed_at !== null" />
                                         </td>
                                         <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-300">
-                                            {{ $task->is_recurring ? 'Yes' : 'No' }}
+                                            {{ $task->recurring_task_id ? 'Yes' : 'No' }}
                                         </td>
                                         <td class="px-6 py-4">
                                             <div class="flex flex-wrap justify-end gap-3 text-sm">

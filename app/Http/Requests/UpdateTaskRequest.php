@@ -20,7 +20,6 @@ class UpdateTaskRequest extends FormRequest
     {
         $this->merge([
             'category_id' => $this->input('category_id') ?: null,
-            'is_recurring' => $this->boolean('is_recurring'),
             'task_date' => $this->input('task_date') ?: null,
         ]);
     }
@@ -42,7 +41,6 @@ class UpdateTaskRequest extends FormRequest
                     fn ($query) => $query->where('user_id', $this->user()->id)
                 ),
             ],
-            'is_recurring' => ['required', 'boolean'],
             'task_date' => ['nullable', 'date'],
         ];
     }
